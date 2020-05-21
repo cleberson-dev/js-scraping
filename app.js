@@ -10,7 +10,7 @@ async function main() {
     // Usando a página de resultados de partidas onde informações do nome do time do site estão disponíveis
     let url = `https://www.hltv.org/results?offset=${i}`;
     
-    console.log(`Scraping: ${url}`);
+    console.log(`[${new Date().toUTCString()}] Scraping: ${url}`);
 
     const { data } = await axios.get(url);
 
@@ -20,10 +20,7 @@ async function main() {
     newTeams = Array.from(newTeams);
     newTeams = newTeams.map(team => team.children[0].data);
     
-    const oldTeamsLength = teams.length;
     teams.push(...newTeams);
-    const newTeamsLength = teams.length;
-    const newTeamsAdded = newTeamsLength - oldTeamsLength;
 
     console.log(`Successfully extracted ${newTeamsAdded} new teams.`);
   }
