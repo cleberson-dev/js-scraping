@@ -19,9 +19,17 @@ async function main() {
     pagesScraped: 0
   };
 
-  // A quantidade de partidas foi obtida manualmente (TODO: Obter automaticamente)
-  for (let i = 0; i < 1000; i += 100) {
-    // Usando a página de resultados de partidas onde informações do nome do time do site estão disponíveis
+  // Necessário obter a quantidade de partidas para ser usado como critério de parada 
+  const { data } = await axios.get('https://www.hltv.org/results');
+  let matches = cheerio
+    .load(data)('span.pagination-data')
+    .text()
+    .split("of")
+    .slice(-1);
+  matches = Number(matches);
+
+  for (let i = 0; i < matches; i += 100) {
+    // Usando a página de resultados de partidas onde estão disponíveis informações do nome do time do site 
     const url = `https://www.hltv.org/results?offset=${i}`;
     const pageScrapingStart = Date.now();
 
