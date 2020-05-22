@@ -3,9 +3,13 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
-const filename = 'teams.json';
+main();
+
+
 
 async function main() {
+  const filename = 'teams.json';
+  
   const stats = {
     scrapingStart: Date.now(),
     teamsExtracted: [],
@@ -65,5 +69,3 @@ async function persist(arr, filename) {
     if (err) console.error(err);
   });
 }
-
-main();
