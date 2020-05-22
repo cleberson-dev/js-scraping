@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const logger = require('./logger');
+const clean = require('./clean');
 
 main();
 
@@ -56,9 +57,11 @@ async function main() {
   });
 
   // Os dados persistidos no arquivo não fecham a array com ']'
-  fs.appendFile(filename, ']', (err) => {
+  fs.appendFileSync(filename, ']', (err) => {
     if (err) console.error(err);
   });
+
+  clean(filename);
 }
 
 async function persist(arr, filename) {
@@ -69,7 +72,7 @@ async function persist(arr, filename) {
     return fs.createWriteStream(filepath).write(stringifiedArray);
   }
 
-  fs.appendFile(filepath, stringifiedArray.replace('[', ','), (err) => {
+  fs.appendFileSync(filepath, stringifiedArray.replace('[', ','), (err) => {
     if (err) console.error(err);
   });
 }
