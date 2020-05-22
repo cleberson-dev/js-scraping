@@ -62,7 +62,7 @@ async function main() {
 }
 
 async function persist(arr, filename) {
-  const filepath = path.join(__dirname, filename);
+  const filepath = path.join(process.cwd(), filename);
   let stringifiedArray = JSON.stringify(arr).slice(0, -1);
   
   if (!fs.existsSync(filepath)) {

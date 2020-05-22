@@ -3,7 +3,7 @@
   "description": "Web scraper with Cheerio, extracting csgo teams from HLTV.org",
   "author": "Cleberson F R Junior <cleberson.dev@gmail.com> (https://github.com/cleberson-dev)",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "node ."
   },
