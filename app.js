@@ -1,10 +1,11 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
-
+const filename = 'teams.json';
 
 async function main() {
-  const teams = [];
   // A quantidade de partidas foi obtida manualmente (TODO: Obter automaticamente)
   for (let i = 0; i < 52976; i += 100) {
     // Usando a página de resultados de partidas onde informações do nome do time do site estão disponíveis
@@ -19,14 +20,31 @@ async function main() {
     
     newTeams = Array.from(newTeams);
     newTeams = newTeams.map(team => team.children[0].data);
-    
-    teams.push(...newTeams);
+    newTeams = [... new Set(newTeams)];
 
-    console.log(`Successfully extracted ${newTeamsAdded} new teams.`);
+    await persist(newTeams, filename);
+
+    console.log(`Successfully extracted ${newTeams.length} new teams.`);
   }
 
-  teams.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0));
-  console.log(teams);
+  fs.appendFile(filename, ']', (err) => {
+    if (err) console.error(err);
+  });
+}
+
+async function persist(arr, filename) {
+  const filepath = path.join(__dirname, filename);
+  let stringifiedArray = JSON.stringify(arr).slice(0, -1);
+  
+  if (!fs.existsSync(filepath)) {
+    const writableFileStream = fs.createWriteStream(filepath);
+    return writableFileStream.write(stringifiedArray);
+  }
+
+  stringifiedArray = stringifiedArray.replace('[', ',');
+  fs.appendFile(filepath, stringifiedArray, (err) => {
+    if (err) console.error(err);
+  });
 }
 
 main();
