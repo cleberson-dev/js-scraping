@@ -3,13 +3,15 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
+const logger = require('./logger');
+
 main();
 
 
 
 async function main() {
   const filename = 'teams.json';
-  
+
   const stats = {
     scrapingStart: Date.now(),
     teamsExtracted: [],
@@ -22,7 +24,7 @@ async function main() {
     const url = `https://www.hltv.org/results?offset=${i}`;
     const pageScrapingStart = Date.now();
 
-    console.log(`[${new Date().toUTCString()}] Scraping: ${url}...`);
+    logger.pageScrapingStarted(url);
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -40,16 +42,18 @@ async function main() {
     const pageScrapingEnd = Date.now();
     const pageScrapingDuration = ((pageScrapingEnd - pageScrapingStart) / 1000).toFixed(2);
 
-    console.log(`Successfully extracted ${newTeams.length} teams. [${pageScrapingDuration}s] \n`);
+    logger.pageScrapingEnded({ teamsExtracted: newTeams.length, pageScrapingDuration });
   }
 
   stats.scrapingEnd = Date.now();
   stats.scrapingDuration = stats.scrapingEnd - stats.scrapingStart;
   stats.totalTeamsExtracted = stats.teamsExtracted.reduce((prev, cur) => prev + cur, 0);
 
-  console.log('Extraction Completed!'); 
-  console.log(`Total Time: ${stats.scrapingDuration / 1000}s (${((stats.scrapingDuration / stats.pagesScraped) / 1000).toFixed(2)}s per page)`);
-  console.log(`${stats.totalTeamsExtracted} teams extracted (${stats.totalTeamsExtracted / stats.pagesScraped} per page)`);
+  logger.completed({
+    pagesScraped: stats.pagesScraped, 
+    scrapingDuration: stats.scrapingDuration, 
+    totalTeamsExtracted: stats.totalTeamsExtracted 
+  });
 
   // Os dados persistidos no arquivo não fecham a array com ']'
   fs.appendFile(filename, ']', (err) => {
