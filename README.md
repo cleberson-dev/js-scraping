@@ -52,6 +52,18 @@ Como o site é renderizado no lado do servidor, todo conteúdo já viria no corp
 
 
 
+## Terminologia
+
+### Data Scraping
+
+Técnica usada para extrair dados de um documento ou aplicação, especificamente dados de saída, que são pretendidos a serem apresentados ao usuário-final, onde talvez não tenha uma documentação ou estrutura formalizada e padronizada. Frequentemente, os dados desejados estão fundidos em meios de dados de multimídia, formatados para apresentação, com rótulos, comentários supérfluos e com informações irrelevantes para processamento.
+
+No contexto da Web, web scraping visa extrair dados de documentos HTML, onde a maioria desses dados indesejados/sujos estão presentes (tags, formulários, metadados, aninhamentos, etc...)
+
+
+
+
+
 ## :writing_hand: Contribuidores
 
 - [@cleberson-dev](https://github.com/cleberson-dev) - Ideia e Projeto Inicial
